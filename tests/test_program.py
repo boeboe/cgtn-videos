@@ -27,12 +27,34 @@ class ProgramVideoTest(unittest.TestCase):
 class ProgramParserTest(unittest.TestCase):
     """Class to test ProgramParser """
 
-    def test_parse(self):
+    def test_parse_programs(self):
         '''Test function '''
         parser = ProgramParser()
 
-        programvideos = parser.parse()
+        programvideos = parser.parse_programs()
         for video in programvideos:
+            self.assertIsNotNone(video.video_url)
+            self.assertIsNotNone(video.poster_url)
+            self.assertIsNotNone(video.detail_url)
+            self.assertIsNotNone(video.share_url)
+            self.assertIsNotNone(video.headline)
+            self.assertIsNotNone(video.publish_time)
+            self.assertIsNotNone(video.editor)
+
+            self.assertTrue(video.video_url)
+            self.assertTrue(video.poster_url)
+            self.assertTrue(video.detail_url)
+            self.assertTrue(video.share_url)
+            self.assertTrue(video.headline)
+            self.assertTrue(video.publish_time)
+            self.assertTrue(video.editor)
+
+    def test_parse_topnews(self):
+        '''Test function '''
+        parser = ProgramParser()
+
+        topnewsvideos = parser.parse_topnews()
+        for video in topnewsvideos:
             self.assertIsNotNone(video.video_url)
             self.assertIsNotNone(video.poster_url)
             self.assertIsNotNone(video.detail_url)

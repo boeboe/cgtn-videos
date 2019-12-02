@@ -26,31 +26,44 @@ class ProgramParser(object):
     """Class to parse CGTN EN Program Videos """
 
     @staticmethod
-    def parse():
+    def parse_programs():
+        """Funtion to fetch program videos for the EN region """
+        return ProgramParser.__parse("https://api.cgtn.com/website/api/program/getList")
+
+    @staticmethod
+    def parse_topnews():
+        """Funtion to fetch topnews videos for the EN region """
+        return ProgramParser.__parse("https://api.cgtn.com/website/api/news/topnews")
+
+    @staticmethod
+    def __parse(url):
         """Funtion to fetch program videos for the EN region """
         videos = []
 
         try:
-            request = requests.get("https://api.cgtn.com/website/api/program/getList", timeout=REQUEST_TIMEOUT)
+            request = requests.get(url, timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
             json = request.json()
             if json['status'] == 200 and json['data']:
                 for video in json['data']:
-                    video_url = video['coverVideo'][0]['video']['url']
-                    poster_url = video['coverVideo'][0]['poster']['url']
-                    detail_url = video['detailUrl']
-                    share_url = video['shareUrl']
-                    headline = video['shortHeadline']
-                    publish_time = video['publishTime']
-                    editor = video['editorName']
+                    try:
+                        video_url = video['coverVideo'][0]['video']['url']
+                        poster_url = video['coverVideo'][0]['poster']['url']
+                        detail_url = video['detailUrl']
+                        share_url = video['shareUrl']
+                        headline = video['shortHeadline']
+                        publish_time = video['publishTime']
+                        editor = video['editorName']
 
-                    videos.append(ProgramVideo(video_url=video_url,
-                                               poster_url=poster_url,
-                                               detail_url=detail_url,
-                                               share_url=share_url,
-                                               headline=headline,
-                                               publish_time=publish_time,
-                                               editor=editor))
+                        videos.append(ProgramVideo(video_url=video_url,
+                                                   poster_url=poster_url,
+                                                   detail_url=detail_url,
+                                                   share_url=share_url,
+                                                   headline=headline,
+                                                   publish_time=publish_time,
+                                                   editor=editor))
+                    except:
+                        continue
         except:
             pass
 
