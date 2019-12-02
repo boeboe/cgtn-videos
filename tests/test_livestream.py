@@ -32,3 +32,6 @@ class LivestreamParserTest(unittest.TestCase):
             self.assertTrue(livestream.program)
             self.assertTrue(livestream.start)
             self.assertTrue(livestream.end)
+
+if __name__ == '__main__':
+    unittest.main()

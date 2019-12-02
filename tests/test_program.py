@@ -48,3 +48,6 @@ class ProgramParserTest(unittest.TestCase):
             self.assertTrue(video.headline)
             self.assertTrue(video.publish_time)
             self.assertTrue(video.editor)
+
+if __name__ == '__main__':
+    unittest.main()

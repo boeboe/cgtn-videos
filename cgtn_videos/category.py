@@ -3,7 +3,9 @@
 import re
 import requests
 import html5lib
+
 from bs4 import BeautifulSoup
+from .config import REQUEST_TIMEOUT
 
 class Category(object):
     """Class to represent news catagories from CGTN EN """
@@ -32,7 +34,7 @@ class CategoryParser(object):
         ignore_categories = ["Specials", "Picture"]
 
         try:
-            request = requests.get(CategoryParser.BASE_URL)
+            request = requests.get(CategoryParser.BASE_URL, timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
         except:
             return []
@@ -63,7 +65,7 @@ class CategoryParser(object):
             return subcategories
 
         try:
-            request = requests.get(url)
+            request = requests.get(url, timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
         except:
             return []

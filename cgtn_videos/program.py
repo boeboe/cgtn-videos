@@ -2,6 +2,8 @@
 """Package to fetch program video links from CGTN EN """
 import requests
 
+from .config import REQUEST_TIMEOUT
+
 class ProgramVideo(object):
     """Class to represent CGTN EN program videos """
 
@@ -29,7 +31,7 @@ class ProgramParser(object):
         videos = []
 
         try:
-            request = requests.get("https://api.cgtn.com/website/api/program/getList")
+            request = requests.get("https://api.cgtn.com/website/api/program/getList", timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
         except:
             return []

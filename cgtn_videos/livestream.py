@@ -4,6 +4,7 @@ import time
 import requests
 
 from .region import Region
+from .config import REQUEST_TIMEOUT
 
 class Livestream(object):
     """Class to represent CGTN Livestreams """
@@ -54,7 +55,7 @@ class LivestreamParser(object):
             return None
 
         try:
-            req = requests.get('{}&startTime={}&endTime={}'.format(schedule_url, now_min_2h, now_add_2h))
+            req = requests.get('{}&startTime={}&endTime={}'.format(schedule_url, now_min_2h, now_add_2h), timeout=REQUEST_TIMEOUT)
             req.raise_for_status()
         except:
             return None

@@ -47,3 +47,6 @@ class CategoryParserTest(unittest.TestCase):
                 self.assertTrue(subcategory.name)
                 self.assertTrue(subcategory.url)
                 self.assertTrue("https://www.cgtn.com/" in subcategory.url)
+
+if __name__ == '__main__':
+    unittest.main()
