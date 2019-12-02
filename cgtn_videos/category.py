@@ -22,6 +22,8 @@ class Category(object):
 
 class CategoryParser(object):
     """Class to parse news catagories from CGTN EN """
+    NO_SUBCAT_LIST = ["china", "sports", "tech-sci", "world", "culture", "transcripts", "opinions", "video"]
+    BASE_URL = "https://www.cgtn.com"
 
     @staticmethod
     def parse_categories():
@@ -30,7 +32,7 @@ class CategoryParser(object):
         ignore_categories = ["Specials", "Picture"]
 
         try:
-            request = requests.get("https://www.cgtn.com/")
+            request = requests.get(CategoryParser.BASE_URL)
             request.raise_for_status()
         except:
             return []
@@ -44,6 +46,8 @@ class CategoryParser(object):
             cat = Category(key=item['href'].split("/")[-1],
                            name=item.text.strip().capitalize(),
                            url=item['href'])
+            if cat.key not in CategoryParser.NO_SUBCAT_LIST:
+                cat.has_subcatagories = True
             categories.append(cat)
 
         return categories
@@ -51,12 +55,11 @@ class CategoryParser(object):
     @staticmethod
     def parse_sub_categories(url):
         """Funtion to fetch news subcategories from CGTN EN """
-        base_url = "https://www.cgtn.com"
         category = url.split("/")[-1]
         subcategories = []
         subcategories_keys = []
 
-        if category in ["china", "sports", "tech-sci", "world", "culture", "transcripts", "opinions", "video"]:
+        if category in CategoryParser.NO_SUBCAT_LIST:
             return subcategories
 
         try:
@@ -72,8 +75,8 @@ class CategoryParser(object):
             if key in ["china", "log"] or key in subcategories_keys:
                 continue
 
-            if base_url not in item['href']:
-                url = base_url + item['href']
+            if CategoryParser.BASE_URL not in item['href']:
+                url = CategoryParser.BASE_URL + item['href']
             else:
                 url = item['href']
 
