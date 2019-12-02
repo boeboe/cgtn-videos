@@ -33,25 +33,25 @@ class ProgramParser(object):
         try:
             request = requests.get("https://api.cgtn.com/website/api/program/getList", timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
+            json = request.json()
+            if json['status'] == 200 and json['data']:
+                for video in json['data']:
+                    video_url = video['coverVideo'][0]['video']['url']
+                    poster_url = video['coverVideo'][0]['poster']['url']
+                    detail_url = video['detailUrl']
+                    share_url = video['shareUrl']
+                    headline = video['shortHeadline']
+                    publish_time = video['publishTime']
+                    editor = video['editorName']
+
+                    videos.append(ProgramVideo(video_url=video_url,
+                                               poster_url=poster_url,
+                                               detail_url=detail_url,
+                                               share_url=share_url,
+                                               headline=headline,
+                                               publish_time=publish_time,
+                                               editor=editor))
         except:
-            return []
+            pass
 
-        json = request.json()
-        if json['status'] == 200 and json['data']:
-            for video in json['data']:
-                video_url = video['coverVideo'][0]['video']['url']
-                poster_url = video['coverVideo'][0]['poster']['url']
-                detail_url = video['detailUrl']
-                share_url = video['shareUrl']
-                headline = video['shortHeadline']
-                publish_time = video['publishTime']
-                editor = video['editorName']
-
-                videos.append(ProgramVideo(video_url=video_url,
-                                           poster_url=poster_url,
-                                           detail_url=detail_url,
-                                           share_url=share_url,
-                                           headline=headline,
-                                           publish_time=publish_time,
-                                           editor=editor))
         return videos

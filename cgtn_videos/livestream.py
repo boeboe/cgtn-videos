@@ -55,18 +55,18 @@ class LivestreamParser(object):
             return None
 
         try:
-            req = requests.get('{}&startTime={}&endTime={}'.format(schedule_url, now_min_2h, now_add_2h), timeout=REQUEST_TIMEOUT)
+            req = requests.get('{}&startTime={}&endTime={}'.format(schedule_url, now_min_2h, now_add_2h),
+                               timeout=REQUEST_TIMEOUT)
             req.raise_for_status()
+            json = req.json()
+            if json['status'] == 200 and json['data']:
+                for item in json['data']:
+                    if int(item['startTime']) < now < int(item['endTime']):
+                        program = item['name']
+                        start = item['startTime']
+                        end = item['endTime']
+                        return Livestream(video_url=video_url, program=program, start=start, end=end)
         except:
-            return None
+            pass
 
-        json = req.json()
-        if json['status'] == 200 and json['data']:
-            for item in json['data']:
-                if int(item['startTime']) < now < int(item['endTime']):
-                    program = item['name']
-                    start = item['startTime']
-                    end = item['endTime']
-                    break
-
-        return Livestream(video_url=video_url, program=program, start=start, end=end)
+        return None

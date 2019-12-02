@@ -11,13 +11,13 @@ from .config import REQUEST_TIMEOUT
 class Video(object):
     """Class to represent videos from CGTN """
 
-    def __init__(self, data_id=None, title=None, video_url=None, img_url=None, web_url=None, date=None):
-        self.data_id = data_id
-        self.title = title
-        self.video_url = video_url
-        self.img_url = img_url
-        self.web_url = web_url
-        self.date = date
+    def __init__(self, **kwargs):
+        self.data_id = kwargs.get("data_id")
+        self.title = kwargs.get("title")
+        self.video_url = kwargs.get("video_url")
+        self.img_url = kwargs.get("img_url")
+        self.web_url = kwargs.get("web_url")
+        self.date = kwargs.get("date")
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
@@ -48,25 +48,24 @@ class VideoParser(object):
         try:
             request = requests.get(url, timeout=REQUEST_TIMEOUT)
             request.raise_for_status()
-        except:
-            return []
+            soup = BeautifulSoup(request.content, "html5lib")
+            video_item_list = soup.find_all("div", {"class": "cg-video"})
 
-        soup = BeautifulSoup(request.content, "html5lib")
-        video_item_list = soup.find_all("div", {"class": "cg-video"})
-
-        if not paged:
-            for video_item in video_item_list:
-                videos.append(VideoParser.__parse_video_en_item(video_item))
-        elif paged and offset * page_size < len(video_item_list):
-            for i in range(offset * page_size, offset * page_size + page_size):
-                try:
-                    video_item = video_item_list[i]
+            if not paged:
+                for video_item in video_item_list:
                     videos.append(VideoParser.__parse_video_en_item(video_item))
-                except IndexError:
-                    break
+            elif paged and offset * page_size < len(video_item_list):
+                for i in range(offset * page_size, offset * page_size + page_size):
+                    try:
+                        video_item = video_item_list[i]
+                        videos.append(VideoParser.__parse_video_en_item(video_item))
+                    except IndexError:
+                        break
+            if videos:
+                VideoParser.__process_m3u8_links(videos)
+        except:
+            pass
 
-        if videos:
-            VideoParser.__process_m3u8_links(videos)
         return videos
 
     @staticmethod
