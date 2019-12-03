@@ -1,10 +1,8 @@
 # pylint: disable=bare-except, unsubscriptable-object
 """Package to test Section """
 import unittest
-import requests
 
 from cgtn_videos.section import SectionVideo, SectionParser, SectionFR
-from cgtn_videos.config import REQUEST_TIMEOUT
 
 class SectionTest(unittest.TestCase):
     """Class to test Section """
@@ -43,19 +41,6 @@ class SectionParserTest(unittest.TestCase):
             self.assertTrue(video.headline)
             self.assertTrue(video.editor)
             self.assertTrue(video.date)
-            # self.assertTrue(SectionParserTest.is_valid_m3u8_content(video.video_url))
-
-    @staticmethod
-    def is_valid_m3u8_content(url):
-        """Helper function to check if m3u8 link is valid """
-        try:
-            request = requests.get(url, timeout=REQUEST_TIMEOUT)
-            request.raise_for_status()
-        except:
-            return False
-
-        request.close()
-        return "#EXTM3U" in request.text
 
 if __name__ == '__main__':
     unittest.main()

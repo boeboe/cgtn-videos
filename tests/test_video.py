@@ -1,10 +1,8 @@
 # pylint: disable=bare-except, broad-except, superfluous-parens
 """Package to test Videos """
 import unittest
-import requests
 
 from cgtn_videos.video import Video, VideoParser
-from cgtn_videos.config import REQUEST_TIMEOUT
 
 class VideoTest(unittest.TestCase):
     """Class to test Video """
