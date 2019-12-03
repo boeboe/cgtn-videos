@@ -30,5 +30,5 @@ Some examples on how to use this package.
 ```python
 from cgtn_videos import *
 
-print("TODO")
+print("Check the tests folder for example usage")
 ```

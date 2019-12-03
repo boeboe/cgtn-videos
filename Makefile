@@ -1,5 +1,5 @@
-RUNTEST=python3 -m unittest -v -b
-
+# RUNTEST=python3 -m unittest -v -b
+RUNTEST=python2 -m unittest discover -v -b 
 ALLMODULES=$(patsubst %.py, %, $(wildcard test_*.py))
 
 .PHONY: tests build clean

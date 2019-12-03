@@ -2,7 +2,6 @@
 # pylint: disable=bare-except
 """Package to represent CGTN sections for regions other then EN """
 from enum import Enum
-from sets import Set
 import concurrent.futures
 import requests
 
@@ -113,8 +112,7 @@ class SectionParser(object):
     @staticmethod
     def __parse(url):
         """Funtion to fetch section videos for regions other then EN """
-        videos = Set()
-
+        videos = set()
         total_count = SectionParser.__parse_total_count(url)
         max_workers = total_count / 100 + 1
 
