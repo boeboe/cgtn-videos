@@ -7,6 +7,8 @@ from .config import REQUEST_TIMEOUT
 from .livestream import Livestream, LivestreamParser
 from .program import ProgramVideo, ProgramParser
 from .region import Region
+from .section import SectionVideo, SectionParser, SectionFR, SectionAR, SectionSP, SectionRU
+from .special import Special, SpecialParser
 from .video import Video, VideoParser
 
 __version__ = '0.0.1'
