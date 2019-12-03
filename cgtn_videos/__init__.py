@@ -3,8 +3,8 @@ from os.path import dirname, basename, isfile
 import glob
 
 from .category import Category, CategoryParser
+from .channel import ChannelProgram, ChannelParser, Channel
 from .config import REQUEST_TIMEOUT
-from .livestream import Livestream, LivestreamParser, LivestreamChannel
 from .program import ProgramVideo, ProgramParser
 from .section import SectionVideo, SectionParser, SectionFR, SectionAR, SectionSP, SectionRU
 from .special import Special, SpecialParser

@@ -1,17 +1,18 @@
-# RUNTEST=python3 -m unittest -v -b
-RUNTEST=python2 -m unittest discover -v -b 
+RUNTEST2=python2 -m unittest discover -v -b 
+RUNTEST3=python3 -m unittest -v -b
 ALLMODULES=$(patsubst %.py, %, $(wildcard test_*.py))
 
-.PHONY: tests build clean
+.PHONY: tests_2 tests_3 build clean upload_testpypi upload_pypi
 
 default: clean build
 upload: upload_testpypi upload_pypi
+tests: tests_2 tests_3
 
-tests:
-	${RUNTEST} ${ALLMODULES}
+tests_2:
+	${RUNTEST2} ${ALLMODULES}
 
-% : test_%.py
-	${RUNTEST} test_$@
+tests_3:
+	${RUNTEST3} ${ALLMODULES}
 
 install:
 	python2 setup.py install && python3 setup.py install
