@@ -4,9 +4,8 @@ import glob
 
 from .category import Category, CategoryParser
 from .config import REQUEST_TIMEOUT
-from .livestream import Livestream, LivestreamParser
+from .livestream import Livestream, LivestreamParser, LivestreamChannel
 from .program import ProgramVideo, ProgramParser
-from .region import Region
 from .section import SectionVideo, SectionParser, SectionFR, SectionAR, SectionSP, SectionRU
 from .special import Special, SpecialParser
 from .video import Video, VideoParser

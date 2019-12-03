@@ -1,8 +1,7 @@
 """Package to test Livestreams """
 import unittest
 
-from cgtn_videos.livestream import Livestream, LivestreamParser
-from cgtn_videos.region import Region
+from cgtn_videos.livestream import Livestream, LivestreamParser, LivestreamChannel
 
 class LivestreamTest(unittest.TestCase):
     """Class to test Livestream """
@@ -18,12 +17,12 @@ class LivestreamTest(unittest.TestCase):
 class LivestreamParserTest(unittest.TestCase):
     """Class to test LivestreamParser """
 
-    def test_parse(self):
+    def test_parse_current_live(self):
         '''Test function '''
         parser = LivestreamParser()
 
-        for region in Region:
-            livestream = parser.parse(region)
+        for region in LivestreamChannel:
+            livestream = parser.parse_current_live(region)
             self.assertIsNotNone(livestream.video_url)
             self.assertIsNotNone(livestream.program)
             self.assertIsNotNone(livestream.start)
