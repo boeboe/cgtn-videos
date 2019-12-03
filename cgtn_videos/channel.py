@@ -22,13 +22,13 @@ class Channel(Enum):
 class ChannelProgram(object):
     """Class to represent CGTN channel programs """
 
-    def __init__(self, epg_id=None, channel_id=None, video_url=None, name=None, start=None, end=None):
-        self.epg_id = epg_id
-        self.channel_id = channel_id
-        self.video_url = video_url
-        self.name = name
-        self.start = start
-        self.end = end
+    def __init__(self, **kwargs):
+        self.epg_id = kwargs.get("epg_id")
+        self.channel_id = kwargs.get("channel_id")
+        self.video_url = kwargs.get("video_url")
+        self.name = kwargs.get("name")
+        self.start = kwargs.get("start")
+        self.end = kwargs.get("end")
 
     def __str__(self):
         return str(self.__class__) + ": " + str(self.__dict__)
@@ -91,15 +91,26 @@ class ChannelParser(object):
     @staticmethod
     def parse_history_by_month(channel, day=None, month=None, year=None):
         """Method to fetch channel history video for a month or day per region """
+        (begin, end) = ChannelParser.__get_window_epoch(year=year, month=month, day=day)
+        return ChannelParser.parse_history_by_window(channel, begin=begin, end=end)
+
+    @staticmethod
+    def parse_history_from_now(channel, hours=None):
+        """Method to fetch channel history video within on a number of hours from now """
+        now = int(round(time.time() * 1000))
+        begin = now - hours * 60 * 60 * 1000
+        return ChannelParser.parse_history_by_window(channel, begin=begin, end=now)
+
+    @staticmethod
+    def parse_history_by_window(channel, begin=None, end=None):
+        """Method to fetch channel history video for a certain window defined by begin and end """
         programs_no_m3u8 = []
         programs = []
 
-        if channel not in Channel or not month or not year:
-            return None
+        if channel not in Channel:
+            return []
 
-        (begin, end) = ChannelParser.__get_window_epoch(year=year, month=month, day=day)
         schedule_url = ChannelParser.SCHED_BASE_URL.format(channel.value["id"], begin, end)
-
         try:
             req = requests.get(schedule_url, timeout=REQUEST_TIMEOUT * 4)
             req.raise_for_status()

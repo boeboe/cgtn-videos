@@ -23,49 +23,65 @@ class ChannelParserTest(unittest.TestCase):
         '''Test function '''
         parser = ChannelParser()
 
-        for region in Channel:
-            live_program = parser.parse_current_live(region)
-            self.assertIsNotNone(live_program.epg_id)
-            self.assertIsNotNone(live_program.channel_id)
-            self.assertIsNotNone(live_program.video_url)
-            self.assertIsNotNone(live_program.name)
-            self.assertIsNotNone(live_program.start)
-            self.assertIsNotNone(live_program.end)
-            self.assertTrue(live_program.epg_id)
-            self.assertTrue(live_program.channel_id)
-            self.assertTrue(live_program.video_url)
-            self.assertTrue(live_program.name)
-            self.assertTrue(live_program.start)
-            self.assertTrue(live_program.end)
+        live_program = parser.parse_current_live(Channel.ENGLISH)
+        self.assertIsNotNone(live_program.epg_id)
+        self.assertIsNotNone(live_program.channel_id)
+        self.assertIsNotNone(live_program.video_url)
+        self.assertIsNotNone(live_program.name)
+        self.assertIsNotNone(live_program.start)
+        self.assertIsNotNone(live_program.end)
+        self.assertTrue(live_program.epg_id)
+        self.assertTrue(live_program.channel_id)
+        self.assertTrue(live_program.video_url)
+        self.assertTrue(live_program.name)
+        self.assertTrue(live_program.start)
+        self.assertTrue(live_program.end)
 
     def test_parse_history_count(self):
         '''Test function '''
         parser = ChannelParser()
-
-        for region in Channel:
-            program_count = parser.parse_history_count(region)
-            self.assertTrue(program_count > 0)
+        program_count = parser.parse_history_count(Channel.ARABIC)
+        self.assertTrue(program_count > 0)
 
     def test_parse_history_by_month(self):
         '''Test function '''
         parser = ChannelParser()
 
-        for region in Channel:
-            channel_programs = parser.parse_history_by_month(region, year=2019, month=1, day=1)
-            self.assertTrue(channel_programs)
-            for channel_program in channel_programs:
-                self.assertIsNotNone(channel_program.epg_id)
-                self.assertIsNotNone(channel_program.channel_id)
-                self.assertIsNotNone(channel_program.video_url)
-                self.assertIsNotNone(channel_program.name)
-                self.assertIsNotNone(channel_program.start)
-                self.assertIsNotNone(channel_program.end)
-                self.assertTrue(channel_program.epg_id)
-                self.assertTrue(channel_program.channel_id)
-                self.assertTrue(channel_program.video_url)
-                self.assertTrue(channel_program.name)
-                self.assertTrue(channel_program.start)
-                self.assertTrue(channel_program.end)
+        channel_programs = parser.parse_history_by_month(Channel.SPANISH, year=2019, month=1, day=1)
+        self.assertTrue(channel_programs)
+        for channel_program in channel_programs:
+            self.assertIsNotNone(channel_program.epg_id)
+            self.assertIsNotNone(channel_program.channel_id)
+            self.assertIsNotNone(channel_program.video_url)
+            self.assertIsNotNone(channel_program.name)
+            self.assertIsNotNone(channel_program.start)
+            self.assertIsNotNone(channel_program.end)
+            self.assertTrue(channel_program.epg_id)
+            self.assertTrue(channel_program.channel_id)
+            self.assertTrue(channel_program.video_url)
+            self.assertTrue(channel_program.name)
+            self.assertTrue(channel_program.start)
+            self.assertTrue(channel_program.end)
+
+    def test_parse_history_from_now(self):
+        '''Test function '''
+        parser = ChannelParser()
+
+        channel_programs = parser.parse_history_from_now(Channel.RUSSIAN, hours=3)
+        self.assertTrue(channel_programs)
+        for channel_program in channel_programs:
+            self.assertIsNotNone(channel_program.epg_id)
+            self.assertIsNotNone(channel_program.channel_id)
+            self.assertIsNotNone(channel_program.video_url)
+            self.assertIsNotNone(channel_program.name)
+            self.assertIsNotNone(channel_program.start)
+            self.assertIsNotNone(channel_program.end)
+            self.assertTrue(channel_program.epg_id)
+            self.assertTrue(channel_program.channel_id)
+            self.assertTrue(channel_program.video_url)
+            self.assertTrue(channel_program.name)
+            self.assertTrue(channel_program.start)
+            self.assertTrue(channel_program.end)
 
 if __name__ == '__main__':
     unittest.main()

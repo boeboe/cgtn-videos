@@ -55,20 +55,6 @@ class VideoParserTest(unittest.TestCase):
             self.assertTrue(video.img_url)
             self.assertTrue(video.web_url)
             self.assertTrue(video.date)
-            # self.assertTrue(VideoParserTest.is_valid_m3u8_content(video.video_url))
-
-    @staticmethod
-    def is_valid_m3u8_content(url):
-        """Helper function to check if m3u8 link is valid """
-        try:
-            request = requests.get(url, timeout=REQUEST_TIMEOUT)
-            request.raise_for_status()
-        except Exception as ex:
-            print("Exception is_valid_m3u8_content: " + ex.message)
-            return False
-
-        request.close()
-        return "#EXTM3U" in request.text
 
 if __name__ == '__main__':
     unittest.main()
