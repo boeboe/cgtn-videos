@@ -30,10 +30,6 @@ class VideoParserTest(unittest.TestCase):
 
         self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/business") > 0)
         self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/business/economy.html") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/politics") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/europe/global-business-europe") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/europe") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/tech-sci") > 0)
         self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/nature") > 0)
         self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/nature/live") > 0)
         self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/china") > 0)
