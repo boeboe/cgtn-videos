@@ -15,6 +15,7 @@ class SectionParserTest(unittest.TestCase):
         for video in videos:
             self.assertTrue(isinstance(video, Video))
             self.assertIsNotNone(video.uid)
+            self.assertIsNotNone(video.channel_id)
             self.assertIsNotNone(video.video_url)
             self.assertIsNotNone(video.img_url)
             self.assertIsNotNone(video.web_url)
@@ -23,6 +24,7 @@ class SectionParserTest(unittest.TestCase):
             self.assertIsNotNone(video.editor)
             self.assertIsNotNone(video.publish_date)
             self.assertTrue(video.uid)
+            self.assertTrue(video.channel_id)
             self.assertTrue(video.video_url)
             self.assertTrue(video.img_url)
             self.assertTrue(video.web_url)

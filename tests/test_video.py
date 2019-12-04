@@ -9,20 +9,21 @@ class VideoTest(unittest.TestCase):
 
     def test_constructor(self):
         '''Test function '''
-        video = Video(uid="A", video_url="B", img_url="C", web_url="D",
-                      title="E", details="F", editor="G",
-                      publish_date="H", start_date="I", end_date="J")
+        video = Video(uid="A", channel_id="B", video_url="C", img_url="D", web_url="E",
+                      title="F", details="G", editor="H", publish_date="I", start_date="J",
+                      end_date="K")
 
         self.assertEqual(video.uid, "A")
-        self.assertEqual(video.video_url, "B")
-        self.assertEqual(video.img_url, "C")
-        self.assertEqual(video.web_url, "D")
-        self.assertEqual(video.title, "E")
-        self.assertEqual(video.details, "F")
-        self.assertEqual(video.editor, "G")
-        self.assertEqual(video.publish_date, "H")
-        self.assertEqual(video.start_date, "I")
-        self.assertEqual(video.end_date, "J")
+        self.assertEqual(video.channel_id, "B")
+        self.assertEqual(video.video_url, "C")
+        self.assertEqual(video.img_url, "D")
+        self.assertEqual(video.web_url, "E")
+        self.assertEqual(video.title, "F")
+        self.assertEqual(video.details, "G")
+        self.assertEqual(video.editor, "H")
+        self.assertEqual(video.publish_date, "I")
+        self.assertEqual(video.start_date, "J")
+        self.assertEqual(video.end_date, "K")
 
     def test_equal(self):
         '''Test function '''

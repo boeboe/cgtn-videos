@@ -7,6 +7,7 @@ class Video(object):
 
     Args:
         uid: a unique id of the video.
+        channel_id: a channel id of the video.
         video_url: url to the m3u8 steaming link of the video.
         img_url: url to a cover or poster image representing the video.
         web_url: url to a news or details page belonging to the video.
@@ -18,9 +19,10 @@ class Video(object):
         end_date: a end date of the video.
     """
 
-    def __init__(self, uid=None, video_url=None, img_url=None, web_url=None, title=None, details=None, editor=None,
-                 publish_date=None, start_date=None, end_date=None):
+    def __init__(self, uid=None, channel_id=None, video_url=None, img_url=None, web_url=None, title=None, details=None,
+                 editor=None, publish_date=None, start_date=None, end_date=None):
         self.uid = uid
+        self.channel_id = channel_id
 
         self.video_url = video_url
         self.img_url = img_url

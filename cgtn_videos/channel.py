@@ -12,17 +12,33 @@ from .video import Video
 class Channel(object):
     """Class to represent CTGN channels """
 
-    ENGLISH = {'name': 'English', 'prefix': 'english', 'suffix': 'news', 'id': '1'}
-    SPANISH = {'name': 'Spanish', 'prefix': 'espanol', 'suffix': 'e', 'id': '2'}
-    FRENCH = {'name': 'French', 'prefix': 'french', 'suffix': 'f', 'id': '3'}
-    ARABIC = {'name': 'Arabic', 'prefix': 'arabic', 'suffix': 'a', 'id': '4'}
-    RUSSIAN = {'name': 'Russian', 'prefix': 'russian', 'suffix': 'r', 'id': '5'}
-    DOCUMENTARY = {'name': 'Documentary', 'prefix': 'document', 'suffix': 'doc', 'id': '6'}
+    ENGLISH = {'key': 'en', 'name': 'English', 'prefix': 'english', 'suffix': 'news', 'id': '1'}
+    SPANISH = {'key': 'sp', 'name': 'Spanish', 'prefix': 'espanol', 'suffix': 'e', 'id': '2'}
+    FRENCH = {'key': 'fr', 'name': 'French', 'prefix': 'french', 'suffix': 'f', 'id': '3'}
+    ARABIC = {'key': 'ar', 'name': 'Arabic', 'prefix': 'arabic', 'suffix': 'a', 'id': '4'}
+    RUSSIAN = {'key': 'ru', 'name': 'Russian', 'prefix': 'russian', 'suffix': 'r', 'id': '5'}
+    DOCUMENTARY = {'key': 'do', 'name': 'Documentary', 'prefix': 'document', 'suffix': 'doc', 'id': '12'}
 
     @classmethod
     def get_all(cls):
         """Get all channels """
         return [cls.ENGLISH, cls.SPANISH, cls.FRENCH, cls.ARABIC, cls.RUSSIAN, cls.DOCUMENTARY]
+
+    @classmethod
+    def get_by_key(cls, channel_key):
+        """Get channel by key """
+        for channel in cls.get_all():
+            if channel['key'] == channel_key:
+                return channel
+        return None
+
+    @classmethod
+    def get_by_id(cls, channel_id):
+        """Get channel by key """
+        for channel in cls.get_all():
+            if channel['id'] == channel_id:
+                return channel
+        return None
 
 class ChannelParser(object):
     """Class to parse CGTN channel videos """
@@ -57,6 +73,21 @@ class ChannelParser(object):
         except:
             pass
         return None
+
+    @staticmethod
+    def parse_all_current_live():
+        """Method to fetch all channel livestream video per region """
+        videos = []
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=len(Channel.get_all())) as executor:
+            future_to_livestream = {
+                executor.submit(ChannelParser.parse_current_live, channel): channel
+                for channel in Channel.get_all()
+                }
+            for future in concurrent.futures.as_completed(future_to_livestream):
+                videos.append(future.result())
+
+        return videos
 
     @staticmethod
     def parse_history_count(channel):
@@ -148,7 +179,8 @@ class ChannelParser(object):
     def __parse_video(json):
         """Helper method to parse the channel video metadata """
         uid = json['epgId']
+        channel_id = json['channelId']
         name = json['name']
         start = json['startTime']
         end = json['endTime']
-        return Video(uid=uid, video_url=None, title=name, start_date=start, end_date=end)
+        return Video(uid=uid, channel_id=channel_id, video_url=None, title=name, start_date=start, end_date=end)

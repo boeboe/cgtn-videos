@@ -163,6 +163,7 @@ class SectionParser(object):
     def __parse_video(json):
         """Helper function to parse json into video object """
         uid = json['id']
+        channel_id = json['channel']
         video_url = json['coverVideo']
         img_url = json['coverUrl']
         web_url = json['link']
@@ -173,5 +174,5 @@ class SectionParser(object):
         editor = json['editorName']
         publish_date = json['publishDate']
 
-        return Video(uid=uid, video_url=video_url, img_url=img_url, web_url=web_url,
+        return Video(uid=uid, channel_id=channel_id, video_url=video_url, img_url=img_url, web_url=web_url,
                      title=title, details=details, editor=editor, publish_date=publish_date)

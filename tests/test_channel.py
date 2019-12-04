@@ -10,16 +10,36 @@ class ChannelParserTest(unittest.TestCase):
     def test_parse_current_live(self):
         '''Test function '''
         parser = ChannelParser()
+        video = parser.parse_current_live(Channel.ARABIC)
+        self.assertTrue(isinstance(video, Video))
+        self.assertIsNotNone(video.uid)
+        self.assertIsNotNone(video.channel_id)
+        self.assertIsNotNone(video.video_url)
+        self.assertIsNotNone(video.title)
+        self.assertIsNotNone(video.start_date)
+        self.assertIsNotNone(video.end_date)
+        self.assertTrue(video.uid)
+        self.assertTrue(video.channel_id)
+        self.assertTrue(video.video_url)
+        self.assertTrue(video.title)
+        self.assertTrue(video.start_date)
+        self.assertTrue(video.end_date)
 
-        for channel in Channel.get_all():
-            video = parser.parse_current_live(channel)
+    def test_parse_all_current_live(self):
+        '''Test function '''
+        parser = ChannelParser()
+        videos = parser.parse_all_current_live()
+
+        for video in videos:
             self.assertTrue(isinstance(video, Video))
             self.assertIsNotNone(video.uid)
+            self.assertIsNotNone(video.channel_id)
             self.assertIsNotNone(video.video_url)
             self.assertIsNotNone(video.title)
             self.assertIsNotNone(video.start_date)
             self.assertIsNotNone(video.end_date)
             self.assertTrue(video.uid)
+            self.assertTrue(video.channel_id)
             self.assertTrue(video.video_url)
             self.assertTrue(video.title)
             self.assertTrue(video.start_date)
