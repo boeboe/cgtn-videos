@@ -37,16 +37,20 @@ class NewsParser(object):
 
             if not paged:
                 for video_item in video_item_list:
-                    videos.append(NewsParser.__parse_video(video_item))
+                    video = NewsParser.__parse_video(video_item)
+                    if video:
+                        videos.append(video)
             elif paged and offset * page_size < len(video_item_list):
                 for i in range(offset * page_size, offset * page_size + page_size):
                     try:
                         video_item = video_item_list[i]
-                        videos.append(NewsParser.__parse_video(video_item))
+                        video = NewsParser.__parse_video(video_item)
+                        if video:
+                            videos.append(video)
                     except IndexError:
                         break
             if videos:
-                NewsParser.__process_m3u8_links(videos)
+                videos = NewsParser.__process_m3u8_links(videos)
         except:
             pass
 
@@ -55,14 +59,19 @@ class NewsParser(object):
     @staticmethod
     def __parse_video(html):
         """Parse a single video item """
+        if not html.a["data-label"]:
+            return None
         uid = html.a["data-news-id"]
         title = html.a["data-label"]
-        img_url = html.a.div.img["data-original"]
+        img_url = html.find_all("a")[-1].div.img["data-original"]
         video_url = img_url.replace(".jpg", ".m3u8").replace(".jpeg", ".m3u8").replace(".png", ".m3u8")
         web_url = html.a["href"]
+        if not web_url.startswith("http"):
+            web_url = "https://www.cgtn.com" + web_url
         publish_date = html.a["data-time"]
-        return Video(uid=uid, video_url=video_url, img_url=img_url, web_url=web_url,
-                     title=title, publish_date=publish_date)
+        video = Video(uid=uid, video_url=video_url, img_url=img_url, web_url=web_url,
+                      title=title, publish_date=publish_date)
+        return video
 
     @staticmethod
     def __check_m3u8_link(video):
