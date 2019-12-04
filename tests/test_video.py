@@ -2,53 +2,59 @@
 """Package to test Videos """
 import unittest
 
-from cgtn_videos.video import Video, VideoParser
+from cgtn_videos.video import Video
 
 class VideoTest(unittest.TestCase):
     """Class to test Video """
 
     def test_constructor(self):
         '''Test function '''
-        video = Video(data_id="A", title="B", video_url="C", img_url="D", web_url="E", date="F")
+        video = Video(uid="A", video_url="B", img_url="C", web_url="D",
+                      title="E", details="F", editor="G",
+                      publish_date="H", start_date="I", end_date="J")
 
-        self.assertEqual(video.data_id, "A")
-        self.assertEqual(video.title, "B")
-        self.assertEqual(video.video_url, "C")
-        self.assertEqual(video.img_url, "D")
-        self.assertEqual(video.web_url, "E")
-        self.assertEqual(video.date, "F")
+        self.assertEqual(video.uid, "A")
+        self.assertEqual(video.video_url, "B")
+        self.assertEqual(video.img_url, "C")
+        self.assertEqual(video.web_url, "D")
+        self.assertEqual(video.title, "E")
+        self.assertEqual(video.details, "F")
+        self.assertEqual(video.editor, "G")
+        self.assertEqual(video.publish_date, "H")
+        self.assertEqual(video.start_date, "I")
+        self.assertEqual(video.end_date, "J")
 
-
-class VideoParserTest(unittest.TestCase):
-    """Class to test CategoryParser """
-
-    def test_parse_video_count_en(self):
+    def test_equal(self):
         '''Test function '''
-        parser = VideoParser()
+        video1 = Video(uid="A", video_url="B")
+        video2 = Video(uid="A", video_url="B", img_url="C")
+        video3 = Video(uid="AA", video_url="BB", img_url="CC", web_url="DD")
+        video4 = Video(video_url="BB", img_url="CCC", web_url="DDD")
 
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/business") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/business/economy.html") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/nature") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/nature/live") > 0)
-        self.assertTrue(parser.parse_video_count_en("https://www.cgtn.com/china") > 0)
+        self.assertEqual(video1, video2)
+        self.assertEqual(video3, video4)
+        self.assertNotEqual(video1, video3)
+        self.assertNotEqual(video1, video4)
+        self.assertNotEqual(video2, video3)
+        self.assertNotEqual(video2, video4)
 
-    def test_parse_videos_en(self):
+    def test_hash(self):
         '''Test function '''
-        parser = VideoParser()
-        videos = parser.parse_videos_en("https://www.cgtn.com/business")
-        for video in videos:
-            self.assertIsNotNone(video.data_id)
-            self.assertIsNotNone(video.title)
-            self.assertIsNotNone(video.video_url)
-            self.assertIsNotNone(video.img_url)
-            self.assertIsNotNone(video.web_url)
-            self.assertIsNotNone(video.date)
-            self.assertTrue(video.data_id)
-            self.assertTrue(video.title)
-            self.assertTrue(video.video_url)
-            self.assertTrue(video.img_url)
-            self.assertTrue(video.web_url)
-            self.assertTrue(video.date)
+        video_set = set()
+        video1 = Video(uid="A", video_url="B")
+        video2 = Video(uid="A", video_url="B", img_url="C")
+        video3 = Video(uid="AA", video_url="BB", img_url="CC", web_url="DD")
+        video4 = Video(video_url="BB", img_url="CCC", web_url="DDD")
+
+        video_set.add(video1)
+        self.assertEqual(len(video_set), 1)
+        video_set.add(video2)
+        self.assertEqual(len(video_set), 1)
+        video_set.add(video3)
+        self.assertEqual(len(video_set), 2)
+        video_set.add(video4)
+        self.assertEqual(len(video_set), 2)
+
 
 if __name__ == '__main__':
     unittest.main()

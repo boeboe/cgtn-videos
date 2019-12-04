@@ -21,7 +21,7 @@ build:
 	python2 setup.py sdist bdist_wheel && python3 setup.py sdist bdist_wheel
 
 clean:
-	rm -rf ./build ./dist ./*.egg-info ./*/__pycache__ ./*/*.pyc
+	rm -rf ./build ./dist ./*.egg-info ./*/__pycache__ ./*/*/__pycache__ ./*/*/*.pyc ./*/*.pyc
 
 upload_testpypi:
 	twine upload --repository testpypi dist/*
