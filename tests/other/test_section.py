@@ -11,7 +11,7 @@ class SectionParserTest(unittest.TestCase):
     def test_parse_section_fr(self):
         '''Test function '''
         parser = SectionParser()
-        videos = parser.parse_section_fr(SectionFR.CHINE.value['id'])
+        videos = parser.parse_section_fr(SectionFR.CHINE['id'])
         for video in videos:
             self.assertTrue(isinstance(video, Video))
             self.assertIsNotNone(video.uid)

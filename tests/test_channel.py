@@ -11,18 +11,19 @@ class ChannelParserTest(unittest.TestCase):
         '''Test function '''
         parser = ChannelParser()
 
-        video = parser.parse_current_live(Channel.ENGLISH)
-        self.assertTrue(isinstance(video, Video))
-        self.assertIsNotNone(video.uid)
-        self.assertIsNotNone(video.video_url)
-        self.assertIsNotNone(video.title)
-        self.assertIsNotNone(video.start_date)
-        self.assertIsNotNone(video.end_date)
-        self.assertTrue(video.uid)
-        self.assertTrue(video.video_url)
-        self.assertTrue(video.title)
-        self.assertTrue(video.start_date)
-        self.assertTrue(video.end_date)
+        for channel in Channel.get_all():
+            video = parser.parse_current_live(channel)
+            self.assertTrue(isinstance(video, Video))
+            self.assertIsNotNone(video.uid)
+            self.assertIsNotNone(video.video_url)
+            self.assertIsNotNone(video.title)
+            self.assertIsNotNone(video.start_date)
+            self.assertIsNotNone(video.end_date)
+            self.assertTrue(video.uid)
+            self.assertTrue(video.video_url)
+            self.assertTrue(video.title)
+            self.assertTrue(video.start_date)
+            self.assertTrue(video.end_date)
 
     def test_parse_history_count(self):
         '''Test function '''

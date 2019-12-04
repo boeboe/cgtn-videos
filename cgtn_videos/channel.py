@@ -1,6 +1,5 @@
 # pylint: disable=bare-except
 """Package to fetch channel video links from CGTN"""
-from enum import Enum
 import calendar
 import concurrent.futures
 import datetime
@@ -10,15 +9,20 @@ import requests
 from .config import REQUEST_TIMEOUT
 from .video import Video
 
-class Channel(Enum):
-    """Class enum to represent CTGN channels """
+class Channel(object):
+    """Class to represent CTGN channels """
 
-    ENGLISH = {'name': 'English Channel', 'prefix': 'english', 'suffix': 'news', 'id': '1'}
-    SPANISH = {'name': 'Spanish Channel', 'prefix': 'espanol', 'suffix': 'e', 'id': '2'}
-    FRENCH = {'name': 'French Channel', 'prefix': 'french', 'suffix': 'f', 'id': '3'}
-    ARABIC = {'name': 'Arabic Channel', 'prefix': 'arabic', 'suffix': 'a', 'id': '4'}
-    RUSSIAN = {'name': 'Russian Channel', 'prefix': 'russian', 'suffix': 'r', 'id': '5'}
-    DOCUMENTARY = {'name': 'Documentary Channel', 'prefix': 'document', 'suffix': 'doc', 'id': '6'}
+    ENGLISH = {'name': 'English', 'prefix': 'english', 'suffix': 'news', 'id': '1'}
+    SPANISH = {'name': 'Spanish', 'prefix': 'espanol', 'suffix': 'e', 'id': '2'}
+    FRENCH = {'name': 'French', 'prefix': 'french', 'suffix': 'f', 'id': '3'}
+    ARABIC = {'name': 'Arabic', 'prefix': 'arabic', 'suffix': 'a', 'id': '4'}
+    RUSSIAN = {'name': 'Russian', 'prefix': 'russian', 'suffix': 'r', 'id': '5'}
+    DOCUMENTARY = {'name': 'Documentary', 'prefix': 'document', 'suffix': 'doc', 'id': '6'}
+
+    @classmethod
+    def get_all(cls):
+        """Get all channels """
+        return [cls.ENGLISH, cls.SPANISH, cls.FRENCH, cls.ARABIC, cls.RUSSIAN, cls.DOCUMENTARY]
 
 class ChannelParser(object):
     """Class to parse CGTN channel videos """
@@ -32,13 +36,13 @@ class ChannelParser(object):
     def parse_current_live(channel):
         """Method to fetch channel livestream video per region """
 
-        if channel not in Channel:
+        if channel not in Channel.get_all():
             return None
 
         now = int(round(time.time() * 1000))
         now_min_2h = now - (2 * 60 * 60 * 1000)
-        live_url = ChannelParser.LIVE_BASE_URL.format(channel.value["prefix"], channel.value["suffix"])
-        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel.value["id"], now_min_2h, now)
+        live_url = ChannelParser.LIVE_BASE_URL.format(channel["prefix"], channel["suffix"])
+        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel["id"], now_min_2h, now)
 
         try:
             req = requests.get(schedule_url, timeout=REQUEST_TIMEOUT)
@@ -58,11 +62,11 @@ class ChannelParser(object):
     def parse_history_count(channel):
         """Method to fetch channel history videos count per region """
 
-        if channel not in Channel:
+        if channel not in Channel.get_all():
             return None
 
         now = int(round(time.time() * 1000))
-        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel.value["id"], 0, now)
+        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel["id"], 0, now)
         try:
             req = requests.get(schedule_url, timeout=REQUEST_TIMEOUT * 4)
             req.raise_for_status()
@@ -90,10 +94,10 @@ class ChannelParser(object):
         videos_no_m3u8 = []
         videos = []
 
-        if channel not in Channel:
+        if channel not in Channel.get_all():
             return []
 
-        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel.value["id"], begin, end)
+        schedule_url = ChannelParser.SCHED_BASE_URL.format(channel["id"], begin, end)
         try:
             req = requests.get(schedule_url, timeout=REQUEST_TIMEOUT * 4)
             req.raise_for_status()
@@ -116,7 +120,7 @@ class ChannelParser(object):
     @staticmethod
     def __parse_video_m3u8(channel, video):
         """Helper method to fetch the m3u8 video stream link """
-        data_url = ChannelParser.DATA_BASE_URL.format(channel.value["id"], video.uid, video.start_date, video.end_date)
+        data_url = ChannelParser.DATA_BASE_URL.format(channel["id"], video.uid, video.start_date, video.end_date)
 
         try:
             req = requests.get(data_url, timeout=REQUEST_TIMEOUT * 2)

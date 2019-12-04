@@ -1,15 +1,14 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=bare-except
 """Package to represent CGTN sections for regions other then EN """
-from enum import Enum
 import concurrent.futures
 import requests
 
 from ..config import REQUEST_TIMEOUT
 from ..video import Video
 
-class SectionFR(Enum):
-    """Class enum to represent CTGN sections for French region """
+class SectionFR(object):
+    """Class to represent CTGN sections for French region """
 
     ALL = {'id': '', 'name': 'Tous', 'name_en': 'All'}
     CHINE = {'id': '1', 'name': 'Chine', 'name_en': 'China'}
@@ -24,8 +23,14 @@ class SectionFR(Enum):
     EXCLUSIVITES = {'id': '10', 'name': 'Exclusivités', 'name_en': 'Exclusives'}
     VIDEOS = {'id': '11', 'name': 'Vidéos', 'name_en': 'Videos'}
 
-class SectionAR(Enum):
-    """Class enum to represent CTGN sections for Arab region """
+    @classmethod
+    def get_all(cls):
+        """Get all channels """
+        return [cls.ALL, cls.CHINE, cls.MONDE, cls.ECONOMIE, cls.OPINIONS, cls.CULTURE,
+                cls.SPORT, cls.MONDE_2, cls.AFRIQUE, cls.MONDE_3, cls.EXCLUSIVITES, cls.VIDEOS]
+
+class SectionAR(object):
+    """Class to represent CTGN sections for Arab region """
 
     ALL = {'id': '', 'name': 'الكل', 'name_en': 'All'}
     CHINA = {'id': '1', 'name': 'الصين', 'name_en': 'China'}
@@ -33,8 +38,13 @@ class SectionAR(Enum):
     ARABIC = {'id': '3', 'name': 'عربي', 'name_en': 'Arabic'}
     DIALOGUE_AND_COMMENTS = {'id': '4', 'name': 'الحوار والتعليقات', 'name_en': 'Dialogue and Comments'}
 
-class SectionSP(Enum):
-    """Class enum to represent CTGN sections for Spanish region """
+    @classmethod
+    def get_all(cls):
+        """Get all channels """
+        return [cls.ALL, cls.CHINA, cls.INTERNATIONAL, cls.ARABIC, cls.DIALOGUE_AND_COMMENTS]
+
+class SectionSP(object):
+    """Class to represent CTGN sections for Spanish region """
 
     ALL = {'id': '', 'name': 'Todo', 'name_en': 'All'}
     CHINA = {'id': '1', 'name': 'China', 'name_en': 'China'}
@@ -45,8 +55,14 @@ class SectionSP(Enum):
     DEPORTES = {'id': '6', 'name': 'Deportes', 'name_en': 'Sports'}
     OTHER = {'id': '7', 'name': 'Other', 'name_en': 'Other'}
 
-class SectionRU(Enum):
-    """Class enum to represent CTGN sections for Russian region """
+    @classmethod
+    def get_all(cls):
+        """Get all channels """
+        return [cls.ALL, cls.CHINA, cls.MUNDO, cls.IBERO_AMERICA, cls.ECONOMIA, cls.CULTURA,
+                cls.DEPORTES, cls.OTHER]
+
+class SectionRU(object):
+    """Class to represent CTGN sections for Russian region """
 
     ALL = {'id': '', 'name': 'все', 'name_en': 'All'}
     POLITICS_ECONOMICS = {'id': '1', 'name': 'Политика/Экономика', 'name_en': 'Politics / Economics'}
@@ -56,6 +72,12 @@ class SectionRU(Enum):
     CHINA = {'id': '5', 'name': 'Китай', 'name_en': 'China'}
     EURASIA = {'id': '6', 'name': 'Евразия', 'name_en': 'Eurasia'}
     WORLD = {'id': '7', 'name': 'мир', 'name_en': 'World'}
+
+    @classmethod
+    def get_all(cls):
+        """Get all channels """
+        return [cls.ALL, cls.POLITICS_ECONOMICS, cls.SCIENCE_EDUCATION, cls.CULTURE_SPORT,
+                cls.SOCIETY, cls.CHINA, cls.EURASIA, cls.WORLD]
 
 
 class SectionParser(object):
@@ -118,7 +140,6 @@ class SectionParser(object):
         """Funtion to fetch section videos for regions other then EN """
         videos = []
         url += "&start={}".format(start)
-        print(url)
 
         try:
             request = requests.get(url, timeout=REQUEST_TIMEOUT)
