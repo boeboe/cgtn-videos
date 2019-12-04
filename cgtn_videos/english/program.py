@@ -28,10 +28,11 @@ class ProgramParser(object):
             request.raise_for_status()
             json = request.json()
             if json['status'] == 200 and json['data']:
-                for video in json['data']:
+                for json_video in json['data']:
                     try:
-                        video = ProgramParser.__parse_video(json)
-                        videos.append(video)
+                        video = ProgramParser.__parse_video(json_video)
+                        if video:
+                            videos.append(video)
                     except:
                         continue
         except:
@@ -42,13 +43,17 @@ class ProgramParser(object):
     @staticmethod
     def __parse_video(json):
         """Parse a single video item """
+        if not json['coverVideo']:
+            return None
         uid = json['newsId']
         video_url = json['coverVideo'][0]['video']['url']
         poster_url = json['coverVideo'][0]['poster']['url']
         web_url = json['shareUrl']
         title = json['shortHeadline']
         editor = json['editorName']
-        details = json['summary']
+        details = ""
+        if json['summary']:
+            details = json['summary']
         publish_date = json['publishTime']
 
         return Video(uid=uid, video_url=video_url, img_url=poster_url, web_url=web_url,
